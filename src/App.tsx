@@ -1,15 +1,11 @@
 import * as React from 'react';
-import Person from 'components/Person';
+import CounterContainer from 'containers/CounterContainer';
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <Person 
-          name="Jason"
-          age={33}
-          job={true}
-        />
+        <CounterContainer />
       </div>
     );
   }
