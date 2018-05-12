@@ -1,44 +1,43 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import Counter from 'components/Counter';
+import { StoreState } from 'store/models';
+import { CounterActions } from 'store/actionCreators';
 
-interface State {
+type Props = {
   count: number;
 }
 
-class CounterContainer extends React.Component<{}, State> {
+class CounterContainer extends React.Component<Props> {
 
-  state: State = {
-    count: 0
-  };
-
-  handleIncrement = (): void => {
-    this.setState(
-      ({ count }) => ({ count: count + 1 })
-    );
+  handleIncrease = (): void => {
+    CounterActions.increase();
   }
 
-  handleDecrement = (): void => {
-    this.setState(
-      ({ count }) => ({ count: count - 1 })
-    );
+  handleDecrease = (): void => {
+    CounterActions.decrease();
   }
 
   render() {
 
-    const { handleIncrement, handleDecrement } = this;
-    const { count } = this.state;
+    const { handleIncrease, handleDecrease } = this;
+    const { count } = this.props;
 
     return (
       <div>
         <h1>Counter</h1>
         <Counter 
           count={count}
-          onIncrement={handleIncrement}
-          onDecrement={handleDecrement}
+          onIncrease={handleIncrease}
+          onDecrease={handleDecrease}
         />
       </div>
     );
   }
 }
 
-export default CounterContainer;
+export default connect(
+  ({ counter }: StoreState) => ({
+    count: counter.count
+  })
+)(CounterContainer);

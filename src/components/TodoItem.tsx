@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-interface Props {
+type Props = {
   id: number;
   text: string;
   completed: boolean;
   onDelete(): void;
-  onCheckbox(): void;
+  onToggle(): void;
 }
 
 class TodoItem extends React.Component<Props> {
@@ -20,7 +20,7 @@ class TodoItem extends React.Component<Props> {
       text, 
       completed, 
       onDelete, 
-      onCheckbox 
+      onToggle 
     } = this.props;
 
     return (
@@ -29,7 +29,7 @@ class TodoItem extends React.Component<Props> {
         <input 
           type="checkbox" 
           defaultChecked={completed}
-          onChange={onCheckbox}
+          onChange={onToggle}
         />
         <button 
           type="button"

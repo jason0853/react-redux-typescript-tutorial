@@ -1,93 +1,71 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import TodoForm from 'components/TodoForm';
 import TodoList from 'components/TodoList';
+import { StoreState } from 'store/models';
+import { TodoItemData } from 'store/models/todo';
+import { TodoActions } from 'store/actionCreators';
 
-interface State {
+type Props = {
   input: string;
-  todos: { id: number; text: string; completed: boolean; }[];
+  list: TodoItemData[];
 }
 
-class TodoContainer extends React.Component<{}, State> {
+class TodoContainer extends React.Component<Props> {
 
   id: number = 0;
 
-  state: State = {
-    input: '',
-    todos: []
-  };
-
   handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const { value } = e.currentTarget;
-
-    this.setState({ input: value });
+    TodoActions.changeInput(value);
   }
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  handleCreate = (e: React.FormEvent<HTMLFormElement>): void => {
+    const { input } = this.props; 
     e.preventDefault();
-    
-    const { input, todos } = this.state;
+    TodoActions.add({ id: this.id++, text: input });
+  }
 
-    const newTodos = [
-      ...todos, 
-      { 
-        id: this.id++,
-        text: input,
-        completed: false
-      }
-    ];
-
-    this.setState({ input: '', todos: newTodos });
+  handleToggle = (id: number): void => {
+    TodoActions.toggle(id);
   }
 
   handleDelete = (id: number): void => {
-    const { todos } = this.state;
-    const newTodos = todos.filter(todo => todo.id !== id);
-
-    this.setState({ todos: newTodos });
-  }
-
-  handleCheckbox = (id: number): void => {
-    const { todos } = this.state;
-    const idx = todos.findIndex(todo => todo.id === id);
-
-    const newTodos = [
-      ...todos.slice(0, idx),
-      {
-        ...todos[idx],
-        completed: !todos[idx].completed
-      },
-      ...todos.slice(idx+1, todos.length)
-    ];
-
-    this.setState({ todos: newTodos });
+    TodoActions.delete(id);
   }
 
   render() {
 
     const { 
-      handleChange, 
-      handleSubmit, 
-      handleDelete,
-      handleCheckbox
+      handleChange,
+      handleCreate,
+      handleToggle,
+      handleDelete
     } = this;
 
-    const { input, todos } = this.state;
+    const { input, list } = this.props;
 
     return (
       <div>
+        <h2>Todo List</h2>
         <TodoForm 
           input={input}
           onChange={handleChange}
-          onSubmit={handleSubmit}
+          onCreate={handleCreate}
         />
         <TodoList 
-          todos={todos}
+          todos={list}
+          onToggle={handleToggle}
           onDelete={handleDelete}
-          onCheckbox={handleCheckbox}
         />
       </div>
     );
   }
 }
 
-export default TodoContainer;
+export default connect(
+  ({ todo }: StoreState) => ({
+    input: todo.input,
+    list: todo.list
+  })
+)(TodoContainer);

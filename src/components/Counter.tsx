@@ -1,19 +1,19 @@
 import * as React from 'react';
 
-interface Props {
+type Props = {
   count: number;
-  onIncrement(): void;
-  onDecrement(): void;
+  onIncrease(): void;
+  onDecrease(): void;
 }
 
 const Counter:React.SFC<Props> = ({
-  count, onIncrement, onDecrement
+  count, onIncrease, onDecrease
 }) => {
   return (
     <div>
       <h2>{count}</h2>
-      <button onClick={onIncrement}>+</button>
-      <button onClick={onDecrement}>_</button>
+      <button onClick={onIncrease}>+</button>
+      <button onClick={onDecrease}>-</button>
     </div>
   );
 };

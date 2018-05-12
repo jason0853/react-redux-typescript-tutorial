@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-interface Props {
+type Props = {
   input: string;
   onChange(e: any): void;
-  onSubmit(e: any): void;
+  onCreate(e: any): void;
 }
 
 const TodoForm:React.SFC<Props> = ({
-  input, onChange, onSubmit
+  input, onChange, onCreate
 }) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onCreate}>
       <input 
         type="text"
         value={input}

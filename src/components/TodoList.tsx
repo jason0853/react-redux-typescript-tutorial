@@ -1,13 +1,14 @@
 import * as React from 'react';
 import TodoItem from './TodoItem';
+import { TodoItemData } from 'store/models/todo';
 
-interface Props {
-  todos: { id: number; text: string; completed: boolean; }[];
+type Props = {
+  todos: TodoItemData[];
   onDelete(id: number): void;
-  onCheckbox(id: number): void;
+  onToggle(id: number): void;
 }
 
-class TodoList extends React.Component<Props, {}> {
+class TodoList extends React.Component<Props> {
 
   shouldComponentUpdate(nextProps: Props) {
     return this.props.todos !== nextProps.todos;
@@ -15,7 +16,7 @@ class TodoList extends React.Component<Props, {}> {
 
   render() {
 
-    const { todos, onDelete, onCheckbox } = this.props;
+    const { todos, onDelete, onToggle } = this.props;
 
     const todoList = todos.map(todo => (
       <TodoItem
@@ -24,7 +25,7 @@ class TodoList extends React.Component<Props, {}> {
         text={todo.text}
         completed={todo.completed}
         onDelete={() => onDelete(todo.id)}
-        onCheckbox={() => onCheckbox(todo.id)}
+        onToggle={() => onToggle(todo.id)}
       />
     ));
 
